@@ -23,4 +23,14 @@ jobs:
           push: true
           tags: cryptocal/14_be:${{ github.sha }}
 
-      # - name: Deploy to VM
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            docker pull cryptocal/14_be:${{ github.sha }}
+            docker stop 14_be || true
+            docker rm 14_be || true
+            docker run -d -p 3000:3000 --name 14_be cryptocal/14_be:${{ github.sha }}
