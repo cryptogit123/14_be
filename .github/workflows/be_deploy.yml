@@ -21,6 +21,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: 14_be:${{ github.sha }}
+          tags: cryptocal/14_be:${{ github.sha }}
 
       # - name: Deploy to VM
