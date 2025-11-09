@@ -5,7 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-image:
+    name: Build Docker Image
     runs-on: ubuntu-latest
 
     steps:
@@ -18,12 +19,19 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and deploy image to docker hub
+      - name: Build and push image to Docker Hub
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: cryptocal/14_be:${{ github.sha }}
 
+  deploy-vm:
+    name: Deploy to VM
+    runs-on: ubuntu-latest
+    needs: build-image
+    if: success()
+
+    steps:
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
         with:
