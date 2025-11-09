@@ -32,6 +32,5 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
             sudo docker pull cryptocal/14_be:${{ github.sha }}
-            sudo docker stop 14_be || true
-            sudo docker rm 14_be || true
-            sudo docker run -d -p 3000:3000 --name 14_be cryptocal/14_be:${{ github.sha }}
+            sudo docker stop $(sudo docker ps -q) || true
+            sudo docker run -d -p 3000:3000 cryptocal/14_be:${{ github.sha }}
